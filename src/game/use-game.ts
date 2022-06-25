@@ -13,6 +13,7 @@ export const useGame = () => {
   const [index, setIndex] = useState(0)
   const interval = useRef<Timer>()
   const [timer, setTimer] = useState(getScoreOfTheDay() ?? '00:00:0');
+  const mobileInputRef = useRef<HTMLInputElement>(null)
 
   const hasPlayed = getStarted()
   const notStarted = !hasPlayed && (!quote || index === 0)
@@ -71,6 +72,10 @@ export const useGame = () => {
     }
   }
 
+  const onMobileKeyboardShow = () => {
+    mobileInputRef.current?.focus()
+  }
+
   const onShare = () => {
     navigator.share({
       title: 'Quicky',
@@ -88,6 +93,8 @@ export const useGame = () => {
     notStarted,
     hasFinished,
     hasPlayed,
+    mobileInputRef,
     onShare,
+    onMobileKeyboardShow,
   }
 }
