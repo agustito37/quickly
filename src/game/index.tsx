@@ -28,18 +28,14 @@ export const Game = () => {
       <p className='text'>
         {leftText}
         <span className={`letter ${strongHighlightedClass} ${strongColoredClass}`}>{letter}</span>
+        {isMobile && <input ref={mobileInputRef} type='text' style={{ width: 0, height: 0, visibility: 'hidden' }} />}
         {rightText}
       </p>
       <p className='author'>- {quote?.author} -</p>
       {!isMobile && notStarted && (
         <p className='guide'>Type the first letter to start</p>
       )}
-      {isMobile && (
-        <>
-          <button className='guide' onClick={onMobileKeyboardShow}>Tap here to start</button>
-          <input ref={mobileInputRef} type='text' style={{ width: 0, height: 0, visibility: 'hidden' }} />
-        </>
-      )}
+      {isMobile && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to start</button>}
       {hasFinished && <FaShareAlt className='share' size={40} onClick={onShare} />}
     </section>
   )
