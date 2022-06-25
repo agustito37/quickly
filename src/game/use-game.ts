@@ -74,7 +74,7 @@ export const useGame = () => {
   const onShare = () => {
     navigator.share({
       title: 'Quicky',
-      text: `Isi pisi on my ${isMobile ? 'mobile' : 'pc'}: ${timer}`,
+      text: `Isi pisi (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
       url: 'www.google.com',
     })
   }

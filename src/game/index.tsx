@@ -20,7 +20,7 @@ export const Game = () => {
 
   return (
     <section className='screen'>
-      <h1>Quicky</h1>
+      <h1>Quickly</h1>
       <p className={`timer ${timerColoredClass}`}>{timer}</p>
       <p className='text'>
         {leftText}
