@@ -28,10 +28,13 @@ $light-color: #ecf0f1;
   margin-bottom: 0;
   width: 70vw;
 
-  strong {
-    color: $secondary-color;
+  .letter {
+    &.colored {
+      color: $secondary-color;
+      font-weight: bold;
+    }
 
-    &.highlight {
+    &.highlight  {
       background-color: $secondary-color;
       font-size: $font-size;
       letter-spacing: 2px;
