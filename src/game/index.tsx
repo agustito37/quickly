@@ -28,7 +28,7 @@ export const Game = () => {
       <p className='text'>
         {leftText}
         <span className={`letter ${strongHighlightedClass} ${strongColoredClass}`}>{letter}</span>
-        {isMobile && <input ref={mobileInputRef} type='text' style={{ width: 0, height: 0, visibility: 'hidden' }} />}
+        {isMobile && <input ref={mobileInputRef} type='text' style={{ width: 0, height: 0 }} />}
         {rightText}
       </p>
       <p className='author'>- {quote?.author} -</p>
