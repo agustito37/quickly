@@ -36,7 +36,7 @@ export const Game = () => {
       )}
       {isMobile && (
         <>
-          <p className='guide' onClick={onMobileKeyboardShow}>Tap here to start</p>
+          <button className='guide' onClick={onMobileKeyboardShow}>Tap here to start</button>
           <input ref={mobileInputRef} type='text' style={{ width: 0, height: 0, visibility: 'hidden' }} />
         </>
       )}
