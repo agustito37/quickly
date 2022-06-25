@@ -32,10 +32,8 @@ export const Game = () => {
         {rightText}
       </p>
       <p className='author'>- {quote?.author} -</p>
-      {!isMobile && notStarted && (
-        <p className='guide'>Type the first letter to start</p>
-      )}
-      {isMobile && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to start</button>}
+      {!isMobile && notStarted && <p className='guide'>Type the first letter to start</p>}
+      {isMobile && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to write</button>}
       {hasFinished && <FaShareAlt className='share' size={40} onClick={onShare} />}
     </section>
   )
