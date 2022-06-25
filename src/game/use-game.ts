@@ -96,5 +96,6 @@ export const useGame = () => {
     mobileInputRef,
     onShare,
     onMobileKeyboardShow,
+    onKeyPressed,
   }
 }
