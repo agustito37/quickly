@@ -40,8 +40,8 @@ export const Game = () => {
       {hasFinished && (
         <RWebShare
           data={{
-            title: 'Quickly game',
-            text: `Isi pisi (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
+            title: 'Quickly: typing challenge',
+            text: `Ez challenge (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
           }}
         >
           <FaShareAlt className='share' size={40} />
