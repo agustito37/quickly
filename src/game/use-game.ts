@@ -94,14 +94,6 @@ export const useGame = () => {
     onKeyPressed({ key: event.target.value?.[event.target.value.length-1] })
   }
 
-  const onShare = () => {
-    navigator.share({
-      title: 'Quicky',
-      text: `Isi pisi (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
-      url: 'www.google.com',
-    })
-  }
-
   return {
     quote,
     letter,
@@ -112,7 +104,6 @@ export const useGame = () => {
     hasFinished,
     hasPlayed,
     mobileInputRef,
-    onShare,
     onMobileKeyboardShow,
     onMobileChange,
     isCustomGame,
