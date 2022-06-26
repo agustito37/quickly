@@ -15,7 +15,7 @@ export const Game = () => {
     onShare,
     onMobileKeyboardShow,
     mobileInputRef,
-    onKeyPressed,
+    onMobileChange,
    } = useGame()
 
   const strongHighlightedClass = letter === ' ' ? 'highlight' : ''
@@ -31,7 +31,7 @@ export const Game = () => {
         <span className={`letter ${strongHighlightedClass} ${strongColoredClass}`}>{letter}</span>
         {rightText}
       </p>
-      {isMobile && <input ref={mobileInputRef} onKeyPress={onKeyPressed} type='text' style={{ width: 0, height: 0, margin: 0, padding: 0 }} />}
+      {isMobile && <input className='hidden-writable-input' ref={mobileInputRef} onChange={onMobileChange} />}
       <p className='author'>- {quote?.author} -</p>
       {!isMobile && notStarted && <p className='guide'>Type the first letter to start</p>}
       {isMobile && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to write</button>}

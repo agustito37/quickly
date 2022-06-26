@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { isMobile } from "../utils/helpers";
 import { getQuoteOfTheDay, getScoreOfTheDay, getStarted, Quote, setScoreOfTheDay, setStarted } from "../utils/storage";
 
@@ -76,6 +76,10 @@ export const useGame = () => {
     mobileInputRef.current?.focus()
   }
 
+  const onMobileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onKeyPressed({ key: event.target.value?.[event.target.value.length-1] })
+  }
+
   const onShare = () => {
     navigator.share({
       title: 'Quicky',
@@ -96,6 +100,6 @@ export const useGame = () => {
     mobileInputRef,
     onShare,
     onMobileKeyboardShow,
-    onKeyPressed,
+    onMobileChange,
   }
 }

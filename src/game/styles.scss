@@ -74,3 +74,12 @@ button.guide {
   color: $light-color;
   margin-top: 12px;
 }
+
+.hidden-writable-input {
+  width: 100px;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+}
