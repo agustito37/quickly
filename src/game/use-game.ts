@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { getCustomGameParam, isMobile } from "../utils/helpers";
+import { getCustomGameParam } from "../utils/helpers";
 import { getQuoteOfTheDay, getScoreOfTheDay, getStarted, Quote, setScoreOfTheDay, setStarted } from "../utils/storage";
 
 interface Timer {
