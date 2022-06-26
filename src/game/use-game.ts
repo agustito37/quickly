@@ -26,6 +26,10 @@ export const useGame = () => {
   const rightText = quote?.text.slice(index+1)
   const letter = quote?.text[index]
 
+  useEffect(() => {
+    initGame()
+  }, [])
+
   const initGame = async () => {
     let quote: Quote
     const customChalenge = getCustomChallengeParam()
@@ -45,10 +49,6 @@ export const useGame = () => {
 
     setTimer(getScoreOfTheDay(quote) ?? DEFAULT_TIMER)
   }
-
-  useEffect(() => {
-    initGame()
-  }, [])
 
   const onTimerUpdate = useCallback((finish = false) => {
     const startTime = interval.current!.startTime
