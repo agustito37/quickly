@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { getCustomGameParam } from "../utils/helpers";
+import { getCustomChallengeParam } from "../utils/helpers";
 import { getQuoteOfTheDay, getScoreOfTheDay, getStarted, Quote, setScoreOfTheDay, setStarted } from "../utils/storage";
 
 interface Timer {
@@ -11,7 +11,7 @@ interface Timer {
 const DEFAULT_TIMER = '00:00:0'
 
 export const useGame = () => {
-  const [isCustomGame, setIsCustomGame] = useState(false)
+  const [isCustomChallenge, setIsCustomChallenge] = useState(false)
   const [quote, setQuote] = useState<Quote>()
   const [index, setIndex] = useState(0)
   const interval = useRef<Timer>()
@@ -19,7 +19,7 @@ export const useGame = () => {
   const mobileInputRef = useRef<HTMLInputElement>(null)
 
   const hasPlayed = getStarted()
-  const notStarted = (isCustomGame || !hasPlayed) && (!quote || index === 0)
+  const notStarted = (isCustomChallenge || !hasPlayed) && (!quote || index === 0)
   const hasFinished = quote && index === quote.text.length
 
   const leftText = quote?.text.slice(0, index)
@@ -27,10 +27,10 @@ export const useGame = () => {
   const letter = quote?.text[index]
 
   useEffect(() => {
-    const customGame = getCustomGameParam()
-    setIsCustomGame(Boolean(customGame))
-    if (customGame) {
-      setQuote({ text: customGame })
+    const customChalenge = getCustomChallengeParam()
+    setIsCustomChallenge(Boolean(customChalenge))
+    if (customChalenge) {
+      setQuote({ text: customChalenge })
     } else {
       setTimer(getScoreOfTheDay() ?? DEFAULT_TIMER)
       getQuoteOfTheDay().then((quote) => setQuote(quote))
@@ -39,10 +39,10 @@ export const useGame = () => {
 
   // if the game has finished we finish the game
   useEffect(() => {
-    if (quote && getStarted() && !isCustomGame) {
+    if (quote && getStarted() && !isCustomChallenge) {
       setIndex(quote.text.length)
     } 
-  }, [quote, isCustomGame])
+  }, [quote, isCustomChallenge])
 
   const onTimerUpdate = useCallback((finish = false) => {
     const startTime = interval.current!.startTime
@@ -50,10 +50,10 @@ export const useGame = () => {
     let difference = moment(moment(currentTime).diff(startTime)).format('mm:ss:S')
     setTimer(difference)
 
-    if (finish && !isCustomGame) {
+    if (finish && !isCustomChallenge) {
       setScoreOfTheDay(difference)
     }
-  }, [isCustomGame])
+  }, [isCustomChallenge])
 
   const onKeyPressed = useCallback(({ key }: { key: string }) => {
     if (key === letter) {
@@ -63,7 +63,7 @@ export const useGame = () => {
           startTime: new Date(),
         }
 
-        if (!isCustomGame) {
+        if (!isCustomChallenge) {
           setStarted()
         }
       }
@@ -77,7 +77,7 @@ export const useGame = () => {
         return newIndex
       })
     }
-  }, [letter, onTimerUpdate, isCustomGame, quote])
+  }, [letter, onTimerUpdate, isCustomChallenge, quote])
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyPressed)
@@ -106,6 +106,6 @@ export const useGame = () => {
     mobileInputRef,
     onMobileKeyboardShow,
     onMobileChange,
-    isCustomGame,
+    isCustomChallenge,
   }
 }
