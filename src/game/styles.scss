@@ -27,6 +27,7 @@ $light-color: #ecf0f1;
   line-height: $line-height;
   margin-bottom: 0;
   width: 70vw;
+  overflow-wrap: break-word;
 
   .letter {
     &.colored {
