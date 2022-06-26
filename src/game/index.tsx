@@ -32,7 +32,7 @@ export const Game = () => {
         {rightText}
       </p>
       {isMobile && <input className='hidden-writable-input' ref={mobileInputRef} onChange={onMobileChange} />}
-      <p className='author'>- {quote?.author} -</p>
+      {Boolean(quote?.author) && <p className='author'>- {quote?.author} -</p>}
       {!isMobile && notStarted && <p className='guide'>Type the first letter to start</p>}
       {isMobile && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to write</button>}
       {hasFinished && <FaShareAlt className='share' size={40} onClick={onShare} />}

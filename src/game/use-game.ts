@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { isMobile } from "../utils/helpers";
+import { getCustomGameParam, isMobile } from "../utils/helpers";
 import { getQuoteOfTheDay, getScoreOfTheDay, getStarted, Quote, setScoreOfTheDay, setStarted } from "../utils/storage";
 
 interface Timer {
@@ -8,15 +8,18 @@ interface Timer {
   startTime: Date,
 }
 
+const DEFAULT_TIMER = '00:00:0'
+
 export const useGame = () => {
+  const [isCustomGame, setIsCustomGame] = useState(false)
   const [quote, setQuote] = useState<Quote>()
   const [index, setIndex] = useState(0)
   const interval = useRef<Timer>()
-  const [timer, setTimer] = useState(getScoreOfTheDay() ?? '00:00:0');
+  const [timer, setTimer] = useState(DEFAULT_TIMER);
   const mobileInputRef = useRef<HTMLInputElement>(null)
 
   const hasPlayed = getStarted()
-  const notStarted = !hasPlayed && (!quote || index === 0)
+  const notStarted = (isCustomGame || !hasPlayed) && (!quote || index === 0)
   const hasFinished = quote && index === quote.text.length
 
   const leftText = quote?.text.slice(0, index)
@@ -24,14 +27,33 @@ export const useGame = () => {
   const letter = quote?.text[index]
 
   useEffect(() => {
-    getQuoteOfTheDay().then((quote) => setQuote(quote))
+    const customGame = getCustomGameParam()
+    setIsCustomGame(Boolean(customGame))
+    if (customGame) {
+      setQuote({ text: customGame })
+    } else {
+      setTimer(getScoreOfTheDay() ?? DEFAULT_TIMER)
+      getQuoteOfTheDay().then((quote) => setQuote(quote))
+    }
   }, [])
 
+  // if the game has finished we finish the game
   useEffect(() => {
-    if (quote && getStarted()) {
+    if (quote && getStarted() && !isCustomGame) {
       setIndex(quote.text.length)
     } 
-  }, [quote])
+  }, [quote, isCustomGame])
+
+  const onTimerUpdate = useCallback((finish = false) => {
+    const startTime = interval.current!.startTime
+    const currentTime = new Date()
+    let difference = moment(moment(currentTime).diff(startTime)).format('mm:ss:S')
+    setTimer(difference)
+
+    if (finish && !isCustomGame) {
+      setScoreOfTheDay(difference)
+    }
+  }, [isCustomGame])
 
   const onKeyPressed = useCallback(({ key }: { key: string }) => {
     if (key === letter) {
@@ -40,7 +62,10 @@ export const useGame = () => {
           interval: setInterval(onTimerUpdate, 100),
           startTime: new Date(),
         }
-        setStarted()
+
+        if (!isCustomGame) {
+          setStarted()
+        }
       }
 
       setIndex((i) => {
@@ -52,7 +77,7 @@ export const useGame = () => {
         return newIndex
       })
     }
-  }, [letter, quote])
+  }, [letter, onTimerUpdate, isCustomGame, quote])
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyPressed)
@@ -60,17 +85,6 @@ export const useGame = () => {
       window.removeEventListener("keydown", onKeyPressed)
     };
   }, [onKeyPressed]);
-
-  const onTimerUpdate = (finish = false) => {
-    const startTime = interval.current!.startTime
-    const currentTime = new Date()
-    let difference = moment(moment(currentTime).diff(startTime)).format('mm:ss:S')
-    setTimer(difference)
-
-    if (finish) {
-      setScoreOfTheDay(difference)
-    }
-  }
 
   const onMobileKeyboardShow = () => {
     mobileInputRef.current?.focus()
@@ -101,5 +115,6 @@ export const useGame = () => {
     onShare,
     onMobileKeyboardShow,
     onMobileChange,
+    isCustomGame,
   }
 }

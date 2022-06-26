@@ -3,10 +3,11 @@ import moment from "moment"
 const QUOTES_KEY = 'quotes_key'
 const SCORE_KEY = 'scores'
 const STARTED_KEY = 'started'
+const CUSTOM_GAME_KEY = 'custom'
 
 export interface Quote {
   text: string,
-  author: string,
+  author?: string,
 }
 
 let scoreCache: string | undefined = undefined
