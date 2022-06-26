@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import { getCustomChallengeParam } from "../utils/helpers";
+import { getCustomAuthorParam, getCustomChallengeParam } from "../utils/helpers";
 import { getQuoteOfTheDay, getScoreOfTheDay, getStarted, Quote, setScoreOfTheDay, setStarted } from "../utils/storage";
 
 interface Timer {
@@ -30,7 +30,8 @@ export const useGame = () => {
     const customChalenge = getCustomChallengeParam()
     setIsCustomChallenge(Boolean(customChalenge))
     if (customChalenge) {
-      setQuote({ text: customChalenge })
+      const customAuthor = getCustomAuthorParam()
+      setQuote({ text: customChalenge, author: customAuthor ?? undefined })
     } else {
       setTimer(getScoreOfTheDay() ?? DEFAULT_TIMER)
       getQuoteOfTheDay().then((quote) => setQuote(quote))

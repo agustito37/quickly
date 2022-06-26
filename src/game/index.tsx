@@ -16,6 +16,7 @@ export const Game = () => {
     onMobileKeyboardShow,
     mobileInputRef,
     onMobileChange,
+    isCustomChallenge,
    } = useGame()
 
   const strongHighlightedClass = letter === ' ' ? 'highlight' : ''
@@ -24,15 +25,16 @@ export const Game = () => {
 
   return (
     <section className='screen'>
-      <h1>Quickly</h1>
+      <h1 className='title'>Quickly</h1>
+      <p className='legend'>{isCustomChallenge ? 'custom' : 'daily'} challenge</p>
       <p className={`timer ${timerColoredClass}`}>{timer}</p>
+      {isMobile && <input className='hidden-writable-input' ref={mobileInputRef} onChange={onMobileChange} />}
       <p className='text'>
         {leftText}
         <span className={`letter ${strongHighlightedClass} ${strongColoredClass}`}>{letter}</span>
         {rightText}
       </p>
-      {isMobile && <input className='hidden-writable-input' ref={mobileInputRef} onChange={onMobileChange} />}
-      {Boolean(quote?.author) && <p className='author'>- {quote?.author} -</p>}
+      <p className='author'>{quote?.author ? `- ${quote?.author} -` : ''}</p>
       {!isMobile && notStarted && <p className='guide'>Type the first letter to start</p>}
       {isMobile && !hasFinished && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to write</button>}
       {hasFinished && (
