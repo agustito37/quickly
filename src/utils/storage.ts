@@ -1,4 +1,5 @@
 import moment from "moment"
+import { hashCode } from "./helpers"
 
 const QUOTES_KEY = 'quotes_key'
 const SCORE_KEY = 'scores'
@@ -12,10 +13,6 @@ export interface Quote {
 let scoreCache: string | undefined = undefined
 let startedCache: boolean | undefined = undefined
 
-const getTodayKey = () => {
-  return moment().format('YYYYDDMM')
-}
-
 export const getQuoteOfTheDay = async (): Promise<Quote> => {
   let quotes = JSON.parse(localStorage.getItem(QUOTES_KEY)!)
   if (!Array.isArray(quotes)) {
@@ -26,28 +23,30 @@ export const getQuoteOfTheDay = async (): Promise<Quote> => {
   return quotes[moment(new Date()).dayOfYear()]
 }
 
-export const setStarted = () => {
-  localStorage.setItem(`${STARTED_KEY}-${getTodayKey()}`, '1')
+export const setStarted = (quote: Quote) => {
+  localStorage.setItem(`${STARTED_KEY}-${hashCode(quote.text)}`, '1')
 }
 
-export const getStarted = () => {
+export const getStarted = (quote?: Quote) => {
+  if (!quote) return false
+
   if (startedCache) {
     return startedCache
   }
 
-  startedCache = Boolean(localStorage.getItem(`${STARTED_KEY}-${getTodayKey()}`))
+  startedCache = Boolean(localStorage.getItem(`${STARTED_KEY}-${hashCode(quote.text)}`))
   return startedCache
 }
 
-export const setScoreOfTheDay = (score: string) => {
-  localStorage.setItem(`${SCORE_KEY}-${getTodayKey()}`, score)
+export const setScoreOfTheDay = (quote: Quote, score: string) => {
+  localStorage.setItem(`${SCORE_KEY}-${hashCode(quote.text)}`, score)
 }
 
-export const getScoreOfTheDay = () => {
+export const getScoreOfTheDay = (quote: Quote) => {
   if (scoreCache) {
     return scoreCache
   }
 
-  scoreCache = localStorage.getItem(`${SCORE_KEY}-${getTodayKey()}`) ?? undefined
+  scoreCache = localStorage.getItem(`${SCORE_KEY}-${hashCode(quote.text)}`) ?? undefined
   return scoreCache
 }
