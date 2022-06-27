@@ -36,19 +36,29 @@ export const useGame = () => {
     if (customChalenge) {
       setIsCustomChallenge(Boolean(customChalenge))
       const customAuthor = getCustomAuthorParam()
-      quote = { text: customChalenge, author: customAuthor ?? undefined } 
+      quote = { text: customChalenge, author: customAuthor ?? undefined }
     } else {
       quote = await getQuoteOfTheDay()
     }
     setQuote(quote)
 
+
+    const timer = getScoreOfTheDay(quote) ?? DEFAULT_TIMER
+    setTimer(timer)
+
+    gtag('event', customChalenge ? 'custom-challenge' : 'daily-challenge', { text: quote.text, author: quote.author })
+
     // if the game has already been played we finish the game
     if (quote && getStarted(quote)) {
       setIndex(quote.text.length)
+      gtag('event', 'already-played', { timer })
     } 
-
-    setTimer(getScoreOfTheDay(quote) ?? DEFAULT_TIMER)
   }
+
+  const onStarted = useCallback(() => {
+    setStarted(quote!)
+    gtag('event', 'started')
+  }, [quote])
 
   const onTimerUpdate = useCallback((finish = false) => {
     const startTime = interval.current!.startTime
@@ -59,7 +69,16 @@ export const useGame = () => {
     if (finish) {
       setScoreOfTheDay(quote!, difference)
     }
+
+    return difference
   }, [quote])
+
+  const finishGame = useCallback(() => {
+    const timer = onTimerUpdate(true)
+    clearInterval(interval.current!.interval)
+
+    gtag('event', 'finished', { timer })
+  }, [onTimerUpdate])
 
   const onKeyPressed = useCallback(({ key }: { key: string }) => {
     if (key === letter) {
@@ -68,20 +87,23 @@ export const useGame = () => {
           interval: setInterval(onTimerUpdate, 100),
           startTime: new Date(),
         }
-
-        setStarted(quote!)
       }
 
       setIndex((i) => {
+        // game just started
+        if (i === 0) {
+          onStarted()
+        }
+
         const newIndex = i + 1
+        // game has finished
         if (newIndex === quote?.text.length) {
-          onTimerUpdate(true)
-          clearInterval(interval.current!.interval)
+          finishGame()
         }
         return newIndex
       })
     }
-  }, [letter, onTimerUpdate, quote])
+  }, [finishGame, letter, onStarted, onTimerUpdate, quote])
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyPressed)
