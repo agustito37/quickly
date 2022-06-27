@@ -114,9 +114,10 @@ export const useGame = () => {
   }, [onKeyPressed]);
 
   const customLink = useMemo(() => {
-    if (!customQuote.text) return ''
-
     const customLink = window.location.href.split('?')[0]
+  
+    if (!customQuote.text) return customLink
+
     const url = new URL(customLink);
     url.searchParams.append('challenge', customQuote.text);
 
