@@ -94,3 +94,40 @@ button.guide {
 .title {
   margin-bottom: 0;
 }
+
+.custom-title {
+  margin-top: 38px;
+  margin-bottom: 16px;
+}
+
+.custom {
+  display: flex;
+  width: 330px;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+
+  .custom-author, .custom-text {
+    flex-basis: 152px;
+  }
+
+  .custom-label {
+    color: $light-color;
+    font-size: 14px;
+    flex-basis: 330px;
+  }
+
+  .custom-link {
+    flex-basis: 294px;
+  }
+
+  .custom-copy {
+    width: 18px;
+    margin-top: 1px;
+
+    svg:active {
+      color: $secondary-color;
+    }
+  }
+}

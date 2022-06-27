@@ -1,4 +1,4 @@
-import { FaShareAlt } from "react-icons/fa";
+import { FaShareAlt, FaCopy } from "react-icons/fa";
 import { RWebShare } from "react-web-share";
 import { isMobile } from "../utils/helpers";
 import './styles.scss'
@@ -13,11 +13,15 @@ export const Game = () => {
     timer,
     notStarted,
     hasFinished,
-    onMobileKeyboardShow,
     mobileInputRef,
-    onMobileChange,
     isCustomChallenge,
+    customLink,
+    onMobileKeyboardShow,
+    onMobileChange,
     onShare,
+    onTextChange,
+    onAuthorChange,
+    onCustomCopy,
    } = useGame()
 
   const strongHighlightedClass = letter === ' ' ? 'highlight' : ''
@@ -39,15 +43,27 @@ export const Game = () => {
       {!isMobile && notStarted && <p className='guide'>Type the first letter to start</p>}
       {isMobile && !hasFinished && <button className='guide' onClick={onMobileKeyboardShow}>Tap here to write</button>}
       {hasFinished && (
-        <RWebShare
-          data={{
-            title: 'Quickly: typing challenge',
-            text: `Ez challenge (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
-          }}
-          onClick={onShare}
-        >
-          <FaShareAlt className='share' size={40} />
-        </RWebShare>
+        <>
+          <div>
+            <RWebShare
+              data={{
+                title: 'Quickly: typing challenge',
+                text: `Ez challenge (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
+              }}
+              onClick={onShare}
+            >
+              <FaShareAlt className='share' size={40} />
+            </RWebShare>
+          </div>
+          <p className='custom-title'>Create your custom challenge</p>
+          <div className='custom'>
+            <input className='custom-text' type='text' placeholder='Challenge text' onChange={onTextChange} />
+            <input className='custom-author' type='text' placeholder='By' onChange={onAuthorChange} />
+            <label className='custom-label' htmlFor='customLink'>Challenge link</label>
+            <input id='customLink' className='custom-link' disabled type='text' value={customLink} />
+            <div className='custom-copy'><FaCopy onClick={onCustomCopy} /></div>
+          </div>
+        </>
       )}
     </section>
   )
