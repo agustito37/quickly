@@ -120,6 +120,10 @@ export const useGame = () => {
     onKeyPressed({ key: event.target.value?.[event.target.value.length-1] })
   }
 
+  const onShare = () => {
+    gtag('event', 'shared')
+  }
+
   return {
     quote,
     letter,
@@ -130,8 +134,9 @@ export const useGame = () => {
     hasFinished,
     hasPlayed,
     mobileInputRef,
+    isCustomChallenge,
     onMobileKeyboardShow,
     onMobileChange,
-    isCustomChallenge,
+    onShare,
   }
 }

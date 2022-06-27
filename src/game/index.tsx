@@ -17,6 +17,7 @@ export const Game = () => {
     mobileInputRef,
     onMobileChange,
     isCustomChallenge,
+    onShare,
    } = useGame()
 
   const strongHighlightedClass = letter === ' ' ? 'highlight' : ''
@@ -43,6 +44,7 @@ export const Game = () => {
             title: 'Quickly: typing challenge',
             text: `Ez challenge (${isMobile ? 'mobile' : 'pc'}): ${timer}`,
           }}
+          onClick={onShare}
         >
           <FaShareAlt className='share' size={40} />
         </RWebShare>
